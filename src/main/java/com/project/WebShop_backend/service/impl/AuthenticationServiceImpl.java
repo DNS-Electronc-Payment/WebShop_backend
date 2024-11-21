@@ -4,17 +4,24 @@ import com.project.WebShop_backend.dto.LoginDTO;
 import com.project.WebShop_backend.dto.UserDTO;
 import com.project.WebShop_backend.mapper.UserDTOMapper;
 import com.project.WebShop_backend.model.User;
+import com.project.WebShop_backend.model.UserTokenState;
+import com.project.WebShop_backend.model.enums.Role;
+import com.project.WebShop_backend.security.TokenUtils;
 import com.project.WebShop_backend.service.AuthenticationService;
-import com.project.WebShop_backend.service.JwtService;
 import com.project.WebShop_backend.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -22,45 +29,52 @@ import java.util.NoSuchElementException;
 public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final UserService userService;
-    private final UserDTOMapper userDTOMapper;
     private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-    public String register(UserDTO userDTO){
-        if (userService.findByEmail(userDTO.getEmail()).isPresent()) {
-            throw new IllegalArgumentException("Email already exists");
-        }
+
+    @Autowired
+    public UserDTOMapper userDTOMapper;
+
+    @Autowired
+    private TokenUtils tokenUtils;
+
+
+
+    public User register(UserDTO userDTO){
 
         User user = userDTOMapper.mapUserDTOToUser(userDTO);
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
 
         User savedUser = userService.save(user);
-        var jwt = jwtService.generateToken(savedUser);
-        return jwt;
+
+        return savedUser;
     }
 
-    public String login(LoginDTO loginDTO){
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginDTO.getEmail(),
-                        loginDTO.getPassword()
-                )
-        );
-        var foundUser= userService.findByEmail(loginDTO.getEmail())
-                .orElseThrow(() -> new NoSuchElementException("User with email " + loginDTO.getEmail() + " not found"));;
-        var jwt= jwtService.generateToken(foundUser);
-        return jwt;
+    public UserTokenState login(
+            LoginDTO authenticationRequest) {
 
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                authenticationRequest.getEmail(), authenticationRequest.getPassword()));
+
+        //ubacuje se korisnik u trenutni security context
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+
+        User user = (User) authentication.getPrincipal();
+        Role role = user.getRole();
+        List<String> rolesString = new ArrayList<>();
+
+
+        rolesString.add(role.toString());
+
+
+        String jwt = tokenUtils.generateToken(user.getUsername(), rolesString, user.getId());
+        int expiresIn = tokenUtils.getExpiredIn();
+
+
+        return new UserTokenState(jwt, expiresIn);
     }
 
-    public String findLoggedInEmail(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (authentication != null && authentication.isAuthenticated()) {
-            return authentication.getName();
-        }
-
-        return null;
-    }
 }
 
