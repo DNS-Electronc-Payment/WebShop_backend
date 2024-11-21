@@ -25,8 +25,8 @@ public class UserDTOMapper {
 
 
         return new User(
-                userDTO.getFirstName(),
-                userDTO.getLastName(),
+                userDTO.getFirstname(),
+                userDTO.getLastname(),
                 userDTO.getEmail(),
                 userDTO.getPassword(),
                 Role.valueOf(userDTO.getRole().toUpperCase())

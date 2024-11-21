@@ -28,14 +28,10 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank(message = "First Name should not be blank!")
     private String firstName;
 
-    @NotBlank(message = "Last Name should not be blank!")
     private String lastName;
 
-    @NotBlank(message = "Email should not be blank!")
-    @Email
     private String email;
     private String password;
 
