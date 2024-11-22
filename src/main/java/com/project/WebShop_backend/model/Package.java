@@ -18,6 +18,8 @@ public class Package {
 
     private String name;
 
+    private Double price;
+
     @ManyToMany
     @JoinTable(
             name = "package_service",
@@ -26,8 +28,9 @@ public class Package {
     )
     private List<Services> services;
 
-    public Package(String name, List<Services> services) {
+    public Package(String name, List<Services> services,Double price) {
         this.name = name;
         this.services = services;
+        this.price=price;
     }
 }

@@ -20,13 +20,14 @@ public class Services {
     private String name;
     private String description;
     private ServiceType type;
-
+    private Double price;
     @ManyToMany(mappedBy = "services")
     private List<Package> packages;
 
-    public Services(String name, String description, ServiceType type) {
+    public Services(String name, String description, ServiceType type,Double price) {
         this.name = name;
         this.description = description;
         this.type = type;
+        this.price=price;
     }
 }

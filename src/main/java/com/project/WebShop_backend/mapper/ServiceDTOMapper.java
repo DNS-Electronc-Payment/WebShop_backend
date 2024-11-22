@@ -13,7 +13,8 @@ public class ServiceDTOMapper {
                 service.getId(),
                 service.getName(),
                 service.getDescription(),
-                service.getType().toString()
+                service.getType().toString(),
+                service.getPrice()
         );
     }
 
@@ -21,7 +22,8 @@ public class ServiceDTOMapper {
         return new Services(
                 dto.getName(),
                 dto.getDescription(),
-                ServiceType.valueOf(dto.getType().toUpperCase())
+                ServiceType.valueOf(dto.getType().toUpperCase()),
+                dto.getPrice()
         );
     }
 }

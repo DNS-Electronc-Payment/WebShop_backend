@@ -14,6 +14,8 @@ public class PackageDTOMapper {
     private ServiceDTOMapper serviceMapper;
     public PackageDTO toDTO(Package packageEntity) {
         PackageDTO dto = new PackageDTO();
+        dto.setId(packageEntity.getId());
+        dto.setPrice(packageEntity.getPrice());
         dto.setName(packageEntity.getName());
         dto.setServices(
                 packageEntity.getServices().stream()

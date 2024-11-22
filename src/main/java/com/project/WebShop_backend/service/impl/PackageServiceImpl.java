@@ -33,7 +33,7 @@ public class PackageServiceImpl implements PackageService {
                 .map(serviceDTOMapper::mapServiceDTOToService)
                 .collect(Collectors.toList());
 
-        Package newPackage = new Package(dto.getName(), serviceEntities);
+        Package newPackage = new Package(dto.getName(), serviceEntities,dto.getPrice());
 
 
         return packageRepository.save(newPackage);
