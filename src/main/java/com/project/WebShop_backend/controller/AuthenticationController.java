@@ -34,9 +34,6 @@ public class AuthenticationController {
     @CrossOrigin(origins = "*")
     @PostMapping("/register")
     public ResponseEntity<User> register( @RequestBody UserDTO userDto){
-        System.out.println("AAAA");
-       User newUser= authenticationService.register(userDto);
-       System.out.println(newUser);
         return  ResponseEntity.ok( authenticationService.register(userDto));
     }
 
