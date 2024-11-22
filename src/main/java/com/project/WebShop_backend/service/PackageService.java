@@ -11,4 +11,8 @@ import java.util.List;
 public interface PackageService {
 
     Package save(PackageDTO dto, List<ServiceDTO> serviceDTOS);
+
+
+     List<PackageDTO> getAll();
+
 }

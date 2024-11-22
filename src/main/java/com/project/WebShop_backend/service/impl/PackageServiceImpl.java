@@ -24,6 +24,9 @@ public class PackageServiceImpl implements PackageService {
     @Autowired
     private ServiceDTOMapper serviceDTOMapper;
 
+    @Autowired
+    private PackageDTOMapper packageDTOMapper;
+
     public Package save(PackageDTO dto, List<ServiceDTO> serviceDTOS){
 
         List<Services> serviceEntities = serviceDTOS.stream()
@@ -37,4 +40,13 @@ public class PackageServiceImpl implements PackageService {
 
     }
 
+
+
+    public List<PackageDTO> getAll() {
+        List<Package> packages = packageRepository.findAll();
+
+        return packages.stream()
+                .map(packageDTOMapper::toDTO)
+                .collect(Collectors.toList());
+    }
 }

@@ -1,5 +1,6 @@
 package com.project.WebShop_backend.service;
 
+import com.project.WebShop_backend.dto.ServiceDTO;
 import com.project.WebShop_backend.model.Services;
 import org.springframework.stereotype.Service;
 
@@ -11,4 +12,6 @@ public interface ServicesService {
 
 
       Services save(Services service);
+
+      List<ServiceDTO> getAll();
 }
