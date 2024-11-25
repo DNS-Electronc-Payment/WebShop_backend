@@ -32,6 +32,7 @@ public class WebSecurityConfig {
             "/api/services/**",
             "/api/packages/**",
             "/api/payments/**",
+            "/api/response/**",
             "/v2/api-docs",
             "/v3/api-docs",
             "/v3/api-docs/**",
@@ -42,6 +43,8 @@ public class WebSecurityConfig {
             "/swagger-ui/**",
             "/webjars/**",
             "/swagger-ui.html",
+            "/responses",
+            "/responses/**"
     };
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
