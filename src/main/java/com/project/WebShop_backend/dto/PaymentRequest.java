@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PaymentRequest {
 
-    private Integer userid;
+    private long userid;
     private Integer packageid;
-    private Integer price;
+    private Double price;
     private String type;
 }

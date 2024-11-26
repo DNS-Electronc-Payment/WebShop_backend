@@ -2,6 +2,7 @@ package com.project.WebShop_backend.client;
 
 
 import com.project.WebShop_backend.config.TransactionResponseHandler;
+import com.project.WebShop_backend.dto.PaymentDataDTO;
 import com.project.WebShop_backend.dto.PaymentRequest;
 import com.project.WebShop_backend.model.BankResponse;
 import com.project.WebShop_backend.model.TransactionResult;
@@ -23,9 +24,13 @@ public class APIClient {
 
 
     public void sendPaymentRequest(PaymentRequest request){
-        String url = "https://localhost:8081/payment/credit-card-payment/" + request.getPrice() + "/"+request.getUserid();
+        System.out.println("SA FRONTA ZAHTJEV"+ request);
+        String url = "https://localhost:8081/payment/credit-card-payment" ;
 
-        restTemplate.postForEntity(url, null, Void.class);
+        PaymentDataDTO paymentDataDTO= new PaymentDataDTO(request.getUserid(), request.getPrice());
+        System.out.println("Sending PaymentDataDTO: " + paymentDataDTO.getPrice()+paymentDataDTO.getUserId());
+        restTemplate.postForEntity(url, paymentDataDTO, Void.class);
+
 
         System.out.println("Payment request sent to PSP service.");
         System.out.println(request);
