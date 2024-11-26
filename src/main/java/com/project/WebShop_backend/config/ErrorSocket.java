@@ -7,7 +7,7 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class TransactionResponseHandler extends TextWebSocketHandler {
+public class ErrorSocket extends TextWebSocketHandler {
     private final List<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
@@ -18,6 +18,5 @@ public class TransactionResponseHandler extends TextWebSocketHandler {
             session.sendMessage(new TextMessage(message));
         }
     }
-
 
 }

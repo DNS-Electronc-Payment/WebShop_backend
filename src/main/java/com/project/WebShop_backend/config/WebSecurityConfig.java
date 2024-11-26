@@ -43,8 +43,12 @@ public class WebSecurityConfig {
             "/swagger-ui/**",
             "/webjars/**",
             "/swagger-ui.html",
-            "/responses",
-            "/responses/**"
+            "/error",
+            "/error/**",
+            "/failed",
+            "/failed/**",
+            "/success",
+            "/success/**"
     };
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {

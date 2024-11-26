@@ -1,11 +1,15 @@
 package com.project.WebShop_backend.client;
 
 
-import com.project.WebShop_backend.config.TransactionResponseHandler;
+import com.project.WebShop_backend.config.ErrorSocket;
+import com.project.WebShop_backend.config.FailedSocket;
+import com.project.WebShop_backend.config.SuccessSocket;
 import com.project.WebShop_backend.dto.PaymentDataDTO;
 import com.project.WebShop_backend.dto.PaymentRequest;
 import com.project.WebShop_backend.model.BankResponse;
 import com.project.WebShop_backend.model.TransactionResult;
+import com.project.WebShop_backend.model.enums.TransactionStatus;
+import org.apache.catalina.startup.FailedContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
@@ -20,7 +24,13 @@ public class APIClient {
 
 
     @Autowired
-    private TransactionResponseHandler transactionResponseHandler;
+    private SuccessSocket successSocket;
+
+    @Autowired
+    private FailedSocket failedSocket;
+
+    @Autowired
+    private ErrorSocket errorSocket;
 
 
     public void sendPaymentRequest(PaymentRequest request){
@@ -37,24 +47,69 @@ public class APIClient {
     }
 
     public void sendBankRequestToFront(BankResponse bankResponse){
+        TransactionStatus status = bankResponse.getTransactionStatus();
 
-        try {
-            transactionResponseHandler.broadcastMessage(bankResponse.getTransactionStatus().toString());
-        } catch (Exception e) {
-            System.out.println(e);
-
+        switch (status) {
+            case SUCCESS:
+                sendSuccessUrl("");
+                break;
+            case ERROR:
+                sendErrorUrl("");
+                break;
+            case FAIL:
+                sendFailedUrl("");
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + status);
         }
+
 
     }
 
     public void sendTransactionResultToFront(TransactionResult result) {
+
+        TransactionStatus status = result.getTransactionResult();
+        switch (status) {
+            case SUCCESS:
+                sendSuccessUrl("");
+                break;
+            case ERROR:
+                sendErrorUrl("");
+                break;
+            case FAIL:
+                sendFailedUrl("");
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + status);
+        }
+
+
+    }
+
+    public void sendErrorUrl(String url){
         try {
-            transactionResponseHandler.broadcastMessage(result.getTransactionResult().toString());
+            errorSocket.broadcastMessage(url);
         } catch (Exception e) {
             System.out.println(e);
 
         }
+    }
 
+    public void sendFailedUrl(String url){
+        try {
+            failedSocket.broadcastMessage(url);
+        } catch (Exception e) {
+            System.out.println(e);
 
+        }
+    }
+
+    public void sendSuccessUrl(String url){
+        try {
+            successSocket.broadcastMessage(url);
+        } catch (Exception e) {
+            System.out.println(e);
+
+        }
     }
 }

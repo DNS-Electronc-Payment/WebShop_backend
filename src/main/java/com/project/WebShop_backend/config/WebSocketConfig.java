@@ -14,11 +14,23 @@ public class WebSocketConfig implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
 
-        registry.addHandler(transactionResponseHandler(), "/responses").setAllowedOrigins("*");
+
+        registry.addHandler(successSocket(), "/success").setAllowedOrigins("*");
+        registry.addHandler(failedSocket(), "/failed").setAllowedOrigins("*");
+        registry.addHandler(errorSocket(), "/error").setAllowedOrigins("*");
+    }
+
+
+
+    @Bean
+    public SuccessSocket successSocket() {
+        return new SuccessSocket();
     }
 
     @Bean
-    public TransactionResponseHandler transactionResponseHandler() {
-        return new TransactionResponseHandler();
-    }
+    public ErrorSocket errorSocket(){return new ErrorSocket();}
+
+    @Bean
+    public FailedSocket failedSocket(){return new FailedSocket();}
+
 }
