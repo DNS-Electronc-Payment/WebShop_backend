@@ -13,9 +13,11 @@ public class ErrorSocket extends TextWebSocketHandler {
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         sessions.add(session);
     }
-    public void broadcastMessage(String message) throws Exception{
+    public void broadcastMessage(String message) throws Exception {
         for (WebSocketSession session : sessions) {
-            session.sendMessage(new TextMessage(message));
+          // Proverava da li je sesija otvorena
+                session.sendMessage(new TextMessage(message));
+
         }
     }
 

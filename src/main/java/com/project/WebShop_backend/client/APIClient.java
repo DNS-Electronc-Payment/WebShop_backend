@@ -49,19 +49,8 @@ public class APIClient {
     public void sendBankRequestToFront(BankResponse bankResponse){
         TransactionStatus status = bankResponse.getTransactionStatus();
 
-        switch (status) {
-            case SUCCESS:
-                sendSuccessUrl("");
-                break;
-            case ERROR:
-                sendErrorUrl("");
-                break;
-            case FAIL:
-                sendFailedUrl("");
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + status);
-        }
+        sendSuccessUrl(status.name());
+
 
 
     }
@@ -69,19 +58,7 @@ public class APIClient {
     public void sendTransactionResultToFront(TransactionResult result) {
 
         TransactionStatus status = result.getTransactionResult();
-        switch (status) {
-            case SUCCESS:
-                sendSuccessUrl("");
-                break;
-            case ERROR:
-                sendErrorUrl("");
-                break;
-            case FAIL:
-                sendFailedUrl("");
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + status);
-        }
+        sendSuccessUrl(status.name());
 
 
     }

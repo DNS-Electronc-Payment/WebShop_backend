@@ -14,9 +14,14 @@ public class FailedSocket extends TextWebSocketHandler {
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         sessions.add(session);
     }
-    public void broadcastMessage(String message) throws Exception{
+    public void broadcastMessage(String message) throws Exception {
         for (WebSocketSession session : sessions) {
-            session.sendMessage(new TextMessage(message));
+            if (session.isOpen()) { // Proverava da li je sesija otvorena
+                session.sendMessage(new TextMessage(message));
+            } else {
+                sessions.remove(session);
+                System.out.println("Session closed, removing from active sessions.");
+            }
         }
     }
 }

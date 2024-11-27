@@ -25,6 +25,7 @@ public class ResponseController {
 
     @PostMapping("/transactionResult")
     public void transactionResult(@RequestBody TransactionResult transactionResult){
+        System.out.println("USAOO");
             apiClient.sendTransactionResultToFront(transactionResult);
 
     }
